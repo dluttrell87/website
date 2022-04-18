@@ -1,5 +1,3 @@
-import os
-
 def calcSize(currentSize, requestedSize, DatastoreSize):
 
     currentTotal = (DatastoreSize-currentSize)/DatastoreSize
