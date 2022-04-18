@@ -4,7 +4,11 @@ def calcSize(currentSize, requestedSize, DatastoreSize):
     print("\n  Current datastore free space is ", round(currentTotal*100, 2) , "%")
 
     newTotal = (DatastoreSize-requestedSize)/DatastoreSize
-    print("  Free space after expanding is ", round(newTotal*100, 2) , "%")
+    #Provide some information about the current free space as percentage
+    if (newTotal >= 0) :
+        print("  Free space after expanding vmdk would be ", round(newTotal*100, 2) , "%")
+    else :
+        print("  Note: Requested size is greater than current datastore size")
 
     if (newTotal*100 < 20) :
         print("\n**Expansion is needed**")
@@ -33,7 +37,7 @@ while (requestedSize <= currentSize) :
 DatastoreSize = 0
 while (DatastoreSize <= currentSize) :
     if (DatastoreSize == 0) :
-        DatastoreSize = int(input("What is your current Datastore LUN size? (in GB) " ))
+        DatastoreSize = int(input("Current Datastore LUN size? (in GB) " ))
     else:
         print("**Datastore LUN size must be larger than current vmdk size**")
         DatastoreSize = int(input("Desired vmdk size? "))
