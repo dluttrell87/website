@@ -1,10 +1,10 @@
 def calcSize(currentSize, requestedSize, DatastoreSize):
 
     currentTotal = (DatastoreSize-currentSize)/DatastoreSize
-    print("Current datastore free space is ", round(currentTotal*100, 2) , "%")
+    print("\n  Current datastore free space is ", round(currentTotal*100, 2) , "%")
 
     newTotal = (DatastoreSize-requestedSize)/DatastoreSize
-    print("Free space after expanding is ", round(newTotal*100, 2) , "%")
+    print("  Free space after expanding is ", round(newTotal*100, 2) , "%")
 
     if (newTotal*100 < 20) :
         print("\n**Expansion is needed**")
@@ -14,9 +14,9 @@ def calcSize(currentSize, requestedSize, DatastoreSize):
             calcSize += 1
             newTotal = (calcSize-requestedSize)/calcSize
         
-        print("\nYour new datastore size should be ", calcSize, "GB")
-        print("Your total free space will be ", round((calcSize-requestedSize)/calcSize*100, 2), "%")
-        print("\n**Increase your datastore by ", (calcSize-DatastoreSize), "GB** \n")
+        print("\n  Your new datastore size should be", calcSize, "GB")
+        print("  Your total free space will be", round((calcSize-requestedSize)/calcSize*100, 2), "%")
+        print("\n**Increase your datastore by", (calcSize-DatastoreSize), "GB** \n")
     elif (newTotal*100 >= 20) :
         print("\n**No Expansion is required**\n")
 
