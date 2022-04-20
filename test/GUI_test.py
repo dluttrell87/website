@@ -44,7 +44,7 @@ layout = [
     [sg.Text('Current used space', font='Tahoma', size=(14, 1)), sg.InputText()],
     [sg.Text('How much to add', font='Tahoma', size=(14, 1)), sg.InputText()],
     [sg.Text('Current total', font='Tahoma', size=(14, 1)), sg.InputText()],
-    [sg.Submit('Calculate', font='Tahoma'), sg.Cancel('Cancel', font='Tahoma')]
+    [sg.Submit('Calculate', font='Tahoma', bind_return_key=True), sg.Cancel('Cancel', font='Tahoma')]
 ]
 
 window = sg.Window("Datastore Allocation", layout)
@@ -60,10 +60,10 @@ Datastore = datastore(usage, request, size)
 if Datastore.needsExpansion() is True:
     layout = [
         [sg.Text("Increase datastore by:", font='Tahoma')],
-        [sg.Text(Datastore.getGB(), font='Tahoma')],
+        [sg.InputText(Datastore.getGB(), font='Tahoma')],
         [sg.Text("Datastore total size should be:", font='Tahoma')],
-        [sg.Text(Datastore.getTotal(), font='Tahoma')],
-        [sg.Submit("OK", font='Tahoma')]
+        [sg.InputText(Datastore.getTotal(), font='Tahoma')],
+        [sg.Submit("OK", font='Tahoma', bind_return_key=True)]
     ]
 
     window = sg.Window("Results", layout)
@@ -74,8 +74,8 @@ else:
     layout = [
         [sg.Text("No increase necessary", font='Tahoma')],
         [sg.Text("New Percent used:", font='Tahoma')],
-        [sg.Text(Datastore.getNewPercent(), font='Tahoma')],
-        [sg.Submit("OK", font='Tahoma')]
+        [sg.InputText(Datastore.getNewPercent(), font='Tahoma')],
+        [sg.Submit("OK", font='Tahoma', bind_return_key=True)]
     ]
 
     window = sg.Window("Results", layout)
