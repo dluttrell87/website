@@ -32,17 +32,21 @@ class datastore:
         targetsize = self.size
         while (targetsize-(self.usage+self.request))/targetsize*100 < 20:
             targetsize += 1
-        return targetsize-size
+        return targetsize-self.size
 
 
 sg.theme('DarkGrey7')
 
 layout = [
-    [sg.Text('Enter datastore information:', size=(35, 1), font='Tahoma')],
-    [sg.Text('Datastore Used:', font='Tahoma', size=(15,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
-    [sg.Text('Adding space:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-su-', default_value='GB')],
-    [sg.Text('Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text(key='status')],
-    [sg.Text('Result:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1), key='-calculate-', readonly=True), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-ru-', default_value='GB')],[sg.Text()],
+    [sg.Text('Enter datastore information:', size=(35, 1), font='Tahoma')],[sg.Text()],
+    [sg.Text('  Datastore Used:', font='Tahoma', size=(15,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
+    [sg.Text('  Adding space:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-su-', default_value='GB')],
+    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text()],
+    [sg.Text('Results:', font='Tahoma', size=(15,1))],[sg.Text()],
+    [sg.Text('  Added Storage:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1), key='-calculate-', readonly=True),
+     sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-ru-', default_value='GB')],
+    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15, 1), key='-calctotal-', readonly=True),
+     sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-rtu-', default_value='GB')], [sg.Text(key='status',font='Tahoma', text_color='lime')], [sg.Text()],
     [sg.Button('Calculate', font='Tahoma', bind_return_key=True), sg.Cancel('Exit', font='Tahoma')]
 ]
 
@@ -111,7 +115,7 @@ while True:
                 window['-calculate-'].update(float(Datastore.getGB())/1024)
         elif Datastore.needsExpansion() is False:
             window['-calculate-'].update('N/A')
-            window['status'].update('Note: No expansion required')
+            window['status'].update('  Note: No expansion required')
         else:
             window['-calculate-'].update('Error')
     else:
