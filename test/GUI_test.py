@@ -2,7 +2,6 @@
 import PySimpleGUI as sg
 
 class datastore:
-
     def __init__(self, x, y, z):
         print('init called')
         self.usage = x
