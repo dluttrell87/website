@@ -8,11 +8,11 @@ class datastore:
         self.size = z
 
 
-    def getPercent(self):
-        return (self.size-self.usage)/self.size*100
+    #def getPercent(self):
+    #    return (self.size-self.usage)/self.size*100
 
-    def getNewPercent(self):
-        return (self.size-(self.usage+self.request))/self.size*100
+    # def getNewPercent(self):
+    #    return (self.size-(self.usage+self.request))/self.size*100
 
     def needsExpansion(self):
         if (self.size-(self.usage+self.request))/self.size*100 < 20:
@@ -41,7 +41,7 @@ layout = [
     [sg.Text('Enter datastore information:', size=(35, 1), font='Tahoma')],
     [sg.Text('Datastore Used:', font='Tahoma', size=(15,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
     [sg.Text('Adding space:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-su-', default_value='GB')],
-    [sg.Text('Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text()],
+    [sg.Text('Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text(key='status')],
     [sg.Text('Result:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1), key='-calculate-', readonly=True), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-ru-', default_value='GB')],[sg.Text()],
     [sg.Button('Calculate', font='Tahoma', bind_return_key=True), sg.Cancel('Exit', font='Tahoma')]
 ]
@@ -104,15 +104,18 @@ while True:
         Datastore = datastore(usage, request, size)
 
         if Datastore.needsExpansion() is True:
+            window['status'].update(' ')
             if (str(values['-ru-']) == 'GB'):
                 window['-calculate-'].update(float(Datastore.getGB()))
             elif (str(values['-ru-']) == 'TB'):
                 window['-calculate-'].update(float(Datastore.getGB())/1024)
         elif Datastore.needsExpansion() is False:
-            window['-calculate-'].update('No expansion required')
+            window['-calculate-'].update('N/A')
+            window['status'].update('Note: No expansion required')
         else:
             window['-calculate-'].update('Error')
     else:
-        window['-calculate-'].update('')
+        window['status'].update(' ')
+        window['-calculate-'].update(' ')
     if event in ('Exit', None):
         break
