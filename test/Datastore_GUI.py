@@ -35,8 +35,8 @@ class datastore:
         return targetsize-self.size
 
 
+# Build PySimpleGUI window
 sg.theme('DarkGrey7')
-
 layout = [
     [sg.Text('Enter datastore information:', size=(35, 1), font='Tahoma')],[sg.Text()],
     [sg.Text('  Datastore Used:', font='Tahoma', size=(15,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
@@ -49,7 +49,6 @@ layout = [
      sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-rtu-', default_value='GB')], [sg.Text(key='status',font='Tahoma', text_color='lime')], [sg.Text()],
     [sg.Button('Calculate', font='Tahoma', bind_return_key=True), sg.Cancel('Exit', font='Tahoma')]
 ]
-
 window = sg.Window("Datastore Allocation", layout)
 
 
@@ -113,13 +112,20 @@ while True:
                 window['-calculate-'].update(float(Datastore.getGB()))
             elif (str(values['-ru-']) == 'TB'):
                 window['-calculate-'].update(float(Datastore.getGB())/1024)
+            if (str(values['-rtu-']) == 'GB'):
+                window['-calctotal-'].update(float(Datastore.getTotal()))
+            elif (str(values['-rtu-']) == 'TB'):
+                window['-calctotal-'].update(float(Datastore.getTotal())/1024)
         elif Datastore.needsExpansion() is False:
             window['-calculate-'].update('N/A')
+            window['-calctotal-'].update('N/A')
             window['status'].update('  Note: No expansion required')
         else:
             window['-calculate-'].update('Error')
+            window['-calctotal-'].update('Error')
     else:
         window['status'].update(' ')
         window['-calculate-'].update(' ')
+        window['-calctotal-'].update(' ')
     if event in ('Exit', None):
         break
