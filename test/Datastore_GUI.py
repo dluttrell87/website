@@ -80,6 +80,7 @@ def validate(values):
     return True
 
 
+# window event loop
 while True:
     event, values = window.read()
     if event in ('Calculate', None) and (validate(values) is True):
@@ -99,10 +100,9 @@ while True:
         else:
             size = size * 1024
 
-        #if size < usage:
-        #    window['-calculate-'].update('Invalid Current Total!')
-        #else:
+        # create/update Datastore object
         Datastore = datastore(usage, request, size)
+
         if Datastore.needsExpansion() is True:
             if (str(values['-ru-']) == 'GB'):
                 window['-calculate-'].update(float(Datastore.getGB()))
@@ -116,42 +116,3 @@ while True:
         window['-calculate-'].update('')
     if event in ('Exit', None):
         break
-
-
-#if Datastore.needsExpansion() is True:#
-#
-#    window['-calculate-'].update(Datastore.getGB())
-#    event, values = window.read()
-##    while True:  # Event Loop
- #       event, values = window.read()
- #       if event == sg.WIN_CLOSED:
- #           break
-    # layout = [
-    #     [sg.Text("Increase datastore by:", font='Tahoma')],
-    #     [sg.InputText(Datastore.getGB(), font='Tahoma')],
-    #     [sg.Text("Datastore total size should be:", font='Tahoma')],
-    #     [sg.InputText(Datastore.getTotal(), font='Tahoma')],
-    #     [sg.Submit("OK", font='Tahoma', bind_return_key=True)]
-    # ]
-
-    # window = sg.Window("Results", layout)
-    # event, values = window.read()
-    # window.close()
-#else:
-#    window['-calculate-'].update('No increase required')
-#    event, values = window.read()
-#    while True:  # Event Loop
-#        event, values = window.read()
-#        if event == sg.WIN_CLOSED:
-#            break
-#    print("test")
-#    layout = [
-#        [sg.Text("No increase necessary", font='Tahoma')],
-#        [sg.Text("New Percent used:", font='Tahoma')],
-#        [sg.InputText(Datastore.getNewPercent(), font='Tahoma')],
-#        [sg.Submit("OK", font='Tahoma', bind_return_key=True)]
-#    ]
-
-#    window = sg.Window("Results", layout)
-#    event, values = window.read()
-#    window.close()
