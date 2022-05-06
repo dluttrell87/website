@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import PySimpleGUI as sg
 
+
 class datastore:
     def __init__(self, x, y, z):
         self.usage = x
@@ -22,30 +23,37 @@ class datastore:
 
 
     def getTotal(self):
-        totalsize = self.size
-        while (totalsize-(self.usage+self.request))/totalsize*100 < 20:
-            totalsize += 1
-        return totalsize
+        if (self.usage + self.request) > (.80*self.size):
+            return ((self.usage+self.request)*1.25)
+        # totalsize = self.size
+        #while (totalsize-(self.usage+self.request))/totalsize*100 < 20:
+        #    totalsize += 1
+        #return totalsize
 
 
     def getGB(self):
-        targetsize = self.size
-        while (targetsize-(self.usage+self.request))/targetsize*100 < 20:
-            targetsize += 1
-        return targetsize-self.size
+        if (self.usage + self.request) > (.80*self.size):
+            return (((self.usage+self.request)*1.25) - self.size)
+        # targetsize = self.size
+        # elif (self.usage + self.request) <= (.8*self.size):
+        #    print("sufficient space")
+
+        #while (targetsize-(self.usage+self.request))/targetsize*100 < 20:
+        #    targetsize += 1
+        #return targetsize-self.size
 
 
 # Build PySimpleGUI window
 sg.theme('DarkGrey7')
 layout = [
-    [sg.Text('Enter datastore information:', size=(35, 1), font='Tahoma')],[sg.Text()],
-    [sg.Text('  Datastore Used:', font='Tahoma', size=(15,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
-    [sg.Text('  Adding space:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-su-', default_value='GB')],
-    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text()],
-    [sg.Text('Results:', font='Tahoma', size=(15,1))],[sg.Text()],
-    [sg.Text('  Added Storage:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15,1), key='-calculate-', readonly=True),
+    [sg.Text('Enter datastore information:', size=(45, 1), font='Tahoma')],[sg.Text()],
+    [sg.Text('  Datastore Used:', font='Tahoma', size=(25,1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-uu-', default_value='GB')],
+    [sg.Text('  Adding space:', font='Tahoma', size=(25, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-su-', default_value='GB')],
+    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(25, 1)), sg.InputText(size=(15,1)), sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-cu-', default_value='GB')],[sg.Text()],
+    [sg.Text('Results:', font='Tahoma', size=(25,1))],[sg.Text()],
+    [sg.Text('  Added Storage:', font='Tahoma', size=(25, 1)), sg.InputText(size=(15,1), key='-calculate-', readonly=True),
      sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-ru-', default_value='GB')],
-    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(15, 1)), sg.InputText(size=(15, 1), key='-calctotal-', readonly=True),
+    [sg.Text('  Datastore Capacity:', font='Tahoma', size=(25, 1)), sg.InputText(size=(15, 1), key='-calctotal-', readonly=True),
      sg.Combo(('GB', 'TB'), enable_events=True, readonly=True, key='-rtu-', default_value='GB')], [sg.Text(key='status',font='Tahoma', text_color='lime')], [sg.Text()],
     [sg.Button('Calculate', font='Tahoma', bind_return_key=True), sg.Cancel('Exit', font='Tahoma')]
 ]
@@ -90,6 +98,8 @@ while True:
         usage = float(values[0])
         request = float(values[1])
         size = float(values[2])
+
+        # convert values depending on unit
         if str(values['-uu-']) == 'GB':
             usage = usage*1
         else:
@@ -109,13 +119,13 @@ while True:
         if Datastore.needsExpansion() is True:
             window['status'].update(' ')
             if (str(values['-ru-']) == 'GB'):
-                window['-calculate-'].update(float(Datastore.getGB()))
+                window['-calculate-'].update(float(round(Datastore.getGB(),5)))
             elif (str(values['-ru-']) == 'TB'):
-                window['-calculate-'].update(float(Datastore.getGB())/1024)
+                window['-calculate-'].update(float(round((Datastore.getGB()/1024),5)))
             if (str(values['-rtu-']) == 'GB'):
-                window['-calctotal-'].update(float(Datastore.getTotal()))
+                window['-calctotal-'].update(float(round(Datastore.getTotal(),5)))
             elif (str(values['-rtu-']) == 'TB'):
-                window['-calctotal-'].update(float(Datastore.getTotal())/1024)
+                window['-calctotal-'].update(float(round((Datastore.getTotal()/1024),5)))
         elif Datastore.needsExpansion() is False:
             window['-calculate-'].update('N/A')
             window['-calctotal-'].update('N/A')
